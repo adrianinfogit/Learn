@@ -129,6 +129,13 @@
         margin-top: 10px;
       }
     }
+
+    /* Add styling for the hard logo */
+    .hard-logo {
+      width: 60px; /* Increased from 40px */
+      height: 70px; /* Increased from 40px */
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -150,20 +157,19 @@
 
     <div class="word-section">
       <button class="btn" id="next-word-btn">Next Word</button>
-    </div>
-
-    <div class="word-section">
-      <button class="btn" id="hard-btn">Hard</button>
-    </div>
-
-    <div class="word-section">
       <button class="btn" id="randomize-btn">Randomize Words</button>
     </div>
+
     <div class="word-section">
-      <a href="second-page.html" class="btn">Go to Second Page</a>
+      <img src="hard-logo.png" alt="Hard" class="hard-logo" id="hard-logo">
+    </div>
+
+    <div class="word-section">
+      <a href="second-page.html" class="btn">See Score</a>
     </div>
     <div class="word-section">
-      <a href="third-page.html" class="btn">Go to Hard Words Page</a>
+      <a href="third-page.html" class="btn">Hard Words Page</a>
+      <!-- Removed Clear All button from here -->
     </div>
   </div>
 
@@ -320,7 +326,7 @@
     const feedback = document.getElementById('feedback');
     const nextWordBtn = document.getElementById('next-word-btn');
     const finishedMessage = document.getElementById('finished');
-    const hardBtn = document.getElementById('hard-btn');
+    const hardLogo = document.getElementById('hard-logo');
 
     // Fisher-Yates shuffle
     function shuffleWords(arr) {
@@ -459,7 +465,7 @@
       saveState();
     }
 
-    hardBtn.addEventListener('click', () => tagWord('Hard'));
+    hardLogo.addEventListener('click', () => tagWord('Hard'));
 
     // Randomize words based on current mode
     randomizeBtn.addEventListener('click', () => {
