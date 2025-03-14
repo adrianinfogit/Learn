@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Language Test</title>
+  <style>
+    /* Basic CSS styling */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .word-section {
+      margin-bottom: 20px;
+    }
+
+    .word-section h2 {
+      margin: 0 0 10px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      margin-right: 10px;
+      border: none;
+      background-color: #007BFF;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+
+    #translation {
+      display: none;
+      font-style: italic;
+      margin-left: 10px;
+      color: #555;
+    }
+
+    #feedback {
+      margin-left: 10px;
+      font-weight: bold;
+    }
+
+    input[type="text"] {
+      padding: 8px;
+      width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .finished-message {
+      text-align: center;
+      font-size: 1.2em;
+      color: green;
+      margin-top: 20px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="test-container">
+    <h1>Language Test</h1>
+    
+    <div class="word-section">
+      <h2 id="original-word"></h2>
+      <button class="btn" id="show-translation-btn">Show Translation</button>
+      <span id="translation"></span>
+    </div>
+
+    <div class="word-section">
+      <input type="text" id="user-guess" placeholder="Type your guess here..." />
+      <button class="btn" id="check-answer-btn">Check Answer</button>
+      <span id="feedback"></span>
+    </div>
+
+    <div class="word-section">
+      <button class="btn" id="next-word-btn">Next Word</button>
+    </div>
+  </div>
+
+  <div class="finished-message hidden" id="finished">
+    You have completed the test!
+  </div>
+
+  <script>
+    // Store all word pairs in a JavaScript array
+    const words = [
+      { original: "schließlich", translated: "enfin" },
+      { original: "danach", translated: "ensuite" },
+      { original: "weit von", translated: "loin de" },
+      { original: "während", translated: "pendant" },
+      { original: "plötzlich", translated: "tout à coup" },
+      { original: "sofort", translated: "tout de suite" },
+      { original: "etwas glauben", translated: "croire qc" },
+      { original: "bleiben", translated: "rester" },
+      { original: "klingeln", translated: "sonner" },
+      { original: "ein Verdacht", translated: "un soupçon" },
+      { original: "Südfrankreich", translated: "le Midi" },
+      { original: "ein Unterschied", translated: "une différence" },
+      { original: "etwas mitbringen", translated: "apporter qc" },
+      { original: "aussehen", translated: "avoir l'air" },
+      { original: "eine Unterrichtsstunde", translated: "un cours" },
+      {
+        original: "„Soupçons“ ist der Titel eines Buches von Hervé Mestron.",
+        translated: "«Soupçons» est le titre d'un livre de Herve Mestron."
+      },
+      {
+        original: "In Südfrankreich gibt es viele Touristen.",
+        translated: "Dans le Midi, il y a beaucoup de touristes."
+      },
+      {
+        original: "(einer Person/einer Sache) wegen",
+        translated: "à cause de qn/qc"
+      },
+      { original: "ein Eindruck", translated: "une impression" },
+      {
+        original: "den Eindruck haben, dass",
+        translated: "avoir l'impression que"
+      },
+      {
+        original: "etw. fühlen, spüren; etw. riechen",
+        translated: "sentir qc"
+      },
+      { original: "afrikanisch", translated: "africain/africaine" },
+      {
+        original: "die Elfenbeinküste (Staat in Westafrika)",
+        translated: "la Côte d'Ivoire"
+      },
+      { original: "etw. zeichnen", translated: "dessiner qc" },
+      { original: "jdn. ermutigen", translated: "encourager qn" },
+      { original: "das Lächeln", translated: "le sourire" },
+      { original: "hinten in, unten in", translated: "au fond de qc" },
+      { original: "eine Figur, eine Statuette", translated: "une statuette" },
+      { original: "verschwinden", translated: "disparaître" },
+      {
+        original: "jdn./etw. berühren, jdn./etw. anfassen",
+        translated: "toucher qn/qc"
+      },
+      { original: "eine Träne", translated: "une larme" },
+      { original: "etw. stehlen", translated: "voler qc" },
+      {
+        original: "ein Schulleiter/eine Schulleiterin (im „Collège“)",
+        translated: "un principal/une principale"
+      },
+      {
+        original: "draußen, im Freien; (hier) Raus mit euch!",
+        translated: "dehors"
+      },
+      { original: "eine Entdeckung", translated: "une découverte" },
+      { original: "unter", translated: "parmi" },
+      { original: "seltsam, merkwürdig", translated: "étrange/étrange" },
+      {
+        original: "das Gegenteil, das Umgekehrte",
+        translated: "l'inverse"
+      },
+      {
+        original: "gelingen, etw. zu tun",
+        translated: "arriver à faire qc"
+      },
+      { original: "Afrika", translated: "l'Afrique" },
+      { original: "eine Provinz", translated: "une province" },
+      { original: "ein Ereignis", translated: "un évènement" },
+      { original: "sich abspielen", translated: "se dérouler" },
+      { original: "umziehen", translated: "déménager" },
+      { original: "ein Gegenstand", translated: "un objet" },
+      { original: "ein Blick", translated: "un regard" },
+      {
+        original: "etw. schneiden, abschneiden",
+        translated: "couper qc"
+      },
+      {
+        original: "jdn./etw. akzeptieren, annehmen",
+        translated: "accepter qn/qc"
+      },
+      {
+        original: "eine Decke, (hier) ein Einband, Umschlag",
+        translated: "une couverture"
+      },
+      {
+        original: "ein Dieb/eine Diebin",
+        translated: "un voleur/une voleuse"
+      },
+      { original: "eine Passage", translated: "un passage" },
+      { original: "ein Roman", translated: "un roman" },
+      {
+        original: "jdm. etw. zurückgeben",
+        translated: "rendre qc à qn"
+      },
+      {
+        original: "eine Kontrolle; (hier) eine Kontrollaufgabe",
+        translated: "un contrôle"
+      },
+      {
+        original: "eine Pause (beim Sprechen) machen; innehalten",
+        translated: "marquer une pause"
+      },
+      {
+        original: "der beste/die beste/das beste",
+        translated: "le meilleur/la meilleure"
+      },
+      { original: "eine Gewohnheit", translated: "une habitude" },
+      {
+        original: "gewöhnlich, normalerweise",
+        translated: "d'habitude"
+      },
+      {
+        original: "eine (Land-)Straße",
+        translated: "une route"
+      },
+      { original: "wenn, als", translated: "lorsque" },
+      { original: "eine Schulter", translated: "une épaule" },
+      {
+        original:
+          "Zuerst haben sie in Paris gewohnt, jetzt wohnen sie in der Provinz.",
+        translated:
+          "D'abord, ils ont habité à Paris, maintenant ils habitent en province."
+      },
+      {
+        original: "Viele wichtige Ereignisse spielen sich in Paris ab.",
+        translated: "Beaucoup d'évènements importants se déroulent à Paris."
+      },
+      {
+        original: "Sie sind von Paris nach Valence umgezogen.",
+        translated: "Ils ont déménagé de Paris à Valence."
+      },
+      {
+        original: "Ich brauche ein Messer, um das Brot zu schneiden.",
+        translated: "Il me faut un couteau pour couper le pain."
+      },
+      {
+        original: "Auf dem Umschlag ist das Foto eines Jungen.",
+        translated: "Sur la couverture, il y a la photo d'un garçon."
+      },
+      {
+        original: "Die Lehrerin gibt die Arbeiten zurück.",
+        translated: "La professeure rend les copies."
+      },
+      {
+        original: "Wer hat die beste Note?",
+        translated: "Qui a la meilleure note?"
+      },
+      {
+        original: "Gelatos hat eine gute Note, wie gewöhnlich.",
+        translated: "Gelatos a une bonne note, comme d'habitude."
+      }
+    ];
+
+    let currentIndex = 0;
+
+    // Get references to elements
+    const testContainer = document.getElementById('test-container');
+    const originalWord = document.getElementById('original-word');
+    const showTranslationBtn = document.getElementById('show-translation-btn');
+    const translation = document.getElementById('translation');
+    const userGuess = document.getElementById('user-guess');
+    const checkAnswerBtn = document.getElementById('check-answer-btn');
+    const feedback = document.getElementById('feedback');
+    const nextWordBtn = document.getElementById('next-word-btn');
+    const finishedMessage = document.getElementById('finished');
+
+    // Load a word by index
+    function loadWord(index) {
+      originalWord.textContent = words[index].original;
+      translation.textContent = words[index].translated;
+      translation.style.display = 'none';
+      userGuess.value = '';
+      feedback.textContent = '';
+      feedback.style.color = 'black';
+    }
+
+    // Show translation on button click
+    showTranslationBtn.addEventListener('click', () => {
+      translation.style.display = 'inline';
+    });
+
+    // Check user's answer
+    checkAnswerBtn.addEventListener('click', () => {
+      const guess = userGuess.value.trim();
+      const correctAnswer = words[currentIndex].translated.trim();
+
+      if (guess.toLowerCase() === correctAnswer.toLowerCase()) {
+        feedback.textContent = 'Correct!';
+        feedback.style.color = 'green';
+      } else {
+        feedback.textContent = 'Wrong!';
+        feedback.style.color = 'red';
+      }
+    });
+
+    // Go to the next word
+    nextWordBtn.addEventListener('click', () => {
+      currentIndex++;
+      if (currentIndex < words.length) {
+        loadWord(currentIndex);
+      } else {
+        // All words shown
+        testContainer.classList.add('hidden');
+        finishedMessage.classList.remove('hidden');
+      }
+    });
+
+    // Initialize with the first word
+    loadWord(currentIndex);
+  </script>
+</body>
+</html>
