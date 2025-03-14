@@ -105,6 +105,15 @@
     .btn + .btn {
       margin-top: 20px; /* Add margin between consecutive buttons */
     }
+    #original-word {
+      font-size: 6rem; /* Increased to twice its size */
+      margin-bottom: 10px;
+    }
+    .not-hard-logo {
+      width: 60px;
+      height: 70px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -125,7 +134,7 @@
 
     <div class="word-section">
       <button class="btn" id="next-word-btn">Next Word</button>
-      <button class="btn" id="not-hard-btn">Not Hard</button>
+      <img src="not-hard-logo.png" alt="Not Hard" class="not-hard-logo" id="not-hard-logo" style="margin-left: 10px;">
     </div>
 
     <div class="word-section">
@@ -137,13 +146,13 @@
       <button class="btn hidden" id="hide-hard-words-btn">Hide Hard Words</button>
     </div>
 
-       <div class="word-section">
+    <div class="word-section"></div>
       <button class="btn" id="clear-all-btn">Clear All</button>
     </div>
 
-    <div class="word-section">
-        <a href="index.html" class="btn">Main Page</a>
-      </div>
+    <div class="word-section" style="margin-top: 20px;">
+      <a href="index.html" class="btn">Main Page</a>
+    </div>
   </div>
 
   <div class="finished-message hidden" id="finished">
@@ -173,7 +182,7 @@
     const checkAnswerBtn = document.getElementById('check-answer-btn');
     const feedback = document.getElementById('feedback');
     const nextWordBtn = document.getElementById('next-word-btn');
-    const notHardBtn = document.getElementById('not-hard-btn');
+    const notHardLogo = document.getElementById('not-hard-logo');
     const finishedMessage = document.getElementById('finished');
     const showHardWordsBtn = document.getElementById('show-hard-words-btn');
     const hideHardWordsBtn = document.getElementById('hide-hard-words-btn');
@@ -235,7 +244,7 @@
     });
 
     // Remove "Hard" tag and go to next word
-    notHardBtn.addEventListener('click', () => {
+    notHardLogo.addEventListener('click', () => {
       if (currentIndex < hardWords.length) {
         const wordIndex = words.findIndex(word => word.original === hardWords[currentIndex].original);
         if (wordIndex !== -1) {
