@@ -2,18 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <!-- 1. VIEWPORT META TAG FOR RESPONSIVENESS -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Language Test</title>
   <style>
-    /* Basic CSS styling */
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f8f8;
+    /* Basic reset and box-sizing for consistent sizing */
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+    }
+
+    /* 2. CONTAINER WITH FLUID WIDTH AND A MAX-WIDTH FOR LARGER DISPLAYS */
     .container {
-      max-width: 700px;
+      width: 100%;
+      max-width: 700px; /* On larger screens, the container won't exceed 700px */
       margin: 40px auto;
       background: #fff;
       padding: 20px;
@@ -31,7 +39,8 @@
     }
 
     .word-section h2 {
-      margin: 0 0 10px;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
     }
 
     .btn {
@@ -42,7 +51,7 @@
       color: #fff;
       border-radius: 4px;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 1rem;
     }
 
     .btn:hover {
@@ -63,14 +72,16 @@
 
     input[type="text"] {
       padding: 8px;
-      width: 300px;
+      width: 60%; /* Use a relative width so it shrinks on smaller screens */
       border: 1px solid #ccc;
       border-radius: 4px;
+      margin-bottom: 10px;
+      font-size: 1rem;
     }
 
     .finished-message {
       text-align: center;
-      font-size: 1.2em;
+      font-size: 1.2rem;
       color: green;
       margin-top: 20px;
     }
@@ -78,12 +89,50 @@
     .hidden {
       display: none;
     }
+
+    /* 3. MEDIA QUERY FOR SMALLER DEVICES */
+    @media (max-width: 600px) {
+      .container {
+        margin: 20px auto;
+        padding: 15px;
+      }
+
+      h1 {
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+      }
+
+      .word-section h2 {
+        font-size: 1.1rem;
+      }
+
+      .btn {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+        margin-bottom: 8px;
+      }
+
+      /* Make the input field take full width on very small screens */
+      input[type="text"] {
+        width: 100%;
+      }
+
+      #feedback {
+        display: block;
+        margin-left: 0;
+        margin-top: 10px;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container" id="test-container">
     <h1>Language Test</h1>
-    
+
+    <div class="word-section">
+      <button class="btn" id="randomize-btn">Randomize Words</button>
+    </div>
+
     <div class="word-section">
       <h2 id="original-word"></h2>
       <button class="btn" id="show-translation-btn">Show Translation</button>
@@ -106,7 +155,7 @@
   </div>
 
   <script>
-    // Store all word pairs in a JavaScript array
+    // Array of word pairs
     const words = [
       { original: "schließlich", translated: "enfin" },
       { original: "danach", translated: "ensuite" },
@@ -233,10 +282,8 @@
       { original: "wenn, als", translated: "lorsque" },
       { original: "eine Schulter", translated: "une épaule" },
       {
-        original:
-          "Zuerst haben sie in Paris gewohnt, jetzt wohnen sie in der Provinz.",
-        translated:
-          "D'abord, ils ont habité à Paris, maintenant ils habitent en province."
+        original: "Zuerst haben sie in Paris gewohnt, jetzt wohnen sie in der Provinz.",
+        translated: "D'abord, ils ont habité à Paris, maintenant ils habitent en province."
       },
       {
         original: "Viele wichtige Ereignisse spielen sich in Paris ab.",
@@ -270,8 +317,9 @@
 
     let currentIndex = 0;
 
-    // Get references to elements
+    // HTML element references
     const testContainer = document.getElementById('test-container');
+    const randomizeBtn = document.getElementById('randomize-btn');
     const originalWord = document.getElementById('original-word');
     const showTranslationBtn = document.getElementById('show-translation-btn');
     const translation = document.getElementById('translation');
@@ -280,6 +328,23 @@
     const feedback = document.getElementById('feedback');
     const nextWordBtn = document.getElementById('next-word-btn');
     const finishedMessage = document.getElementById('finished');
+
+    // Fisher-Yates shuffle
+    function shuffleWords(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+    }
+
+    // Shuffle words on button click
+    randomizeBtn.addEventListener('click', () => {
+      shuffleWords(words);
+      currentIndex = 0;
+      loadWord(currentIndex);
+      testContainer.classList.remove('hidden');
+      finishedMessage.classList.add('hidden');
+    });
 
     // Load a word by index
     function loadWord(index) {
@@ -291,7 +356,7 @@
       feedback.style.color = 'black';
     }
 
-    // Show translation on button click
+    // Show translation
     showTranslationBtn.addEventListener('click', () => {
       translation.style.display = 'inline';
     });
@@ -310,19 +375,18 @@
       }
     });
 
-    // Go to the next word
+    // Go to next word
     nextWordBtn.addEventListener('click', () => {
       currentIndex++;
       if (currentIndex < words.length) {
         loadWord(currentIndex);
       } else {
-        // All words shown
         testContainer.classList.add('hidden');
         finishedMessage.classList.remove('hidden');
       }
     });
 
-    // Initialize with the first word
+    // Initialize
     loadWord(currentIndex);
   </script>
 </body>
