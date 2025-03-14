@@ -152,6 +152,9 @@
       <button class="btn" id="next-word-btn">Next Word</button>
       <button class="btn" id="randomize-btn" style="margin-left: 20px;">Randomize Words</button>
     </div>
+    <div class="word-section">
+      <button class="btn" id="remind-me-btn">Remind Me in 3 Mins</button>
+    </div>
   </div>
 
   <div class="finished-message hidden" id="finished">
@@ -332,6 +335,7 @@
     const feedback = document.getElementById('feedback');
     const nextWordBtn = document.getElementById('next-word-btn');
     const finishedMessage = document.getElementById('finished');
+    const remindMeBtn = document.getElementById('remind-me-btn');
 
     // Fisher-Yates shuffle
     function shuffleWords(arr) {
@@ -381,6 +385,23 @@
 
     // Go to next word
     nextWordBtn.addEventListener('click', () => {
+      currentIndex++;
+      if (currentIndex < words.length) {
+        loadWord(currentIndex);
+      } else {
+        testContainer.classList.add('hidden');
+        finishedMessage.classList.remove('hidden');
+      }
+    });
+
+    // Remind me in 3 minutes
+    remindMeBtn.addEventListener('click', () => {
+      const currentWord = words[currentIndex];
+      setTimeout(() => {
+        alert(`Reminder: The word is "${currentWord.original}" which translates to "${currentWord.translated}".`);
+      }, 12000); // 3 minutes in milliseconds
+
+      // Move to the next word
       currentIndex++;
       if (currentIndex < words.length) {
         loadWord(currentIndex);
