@@ -102,6 +102,9 @@
     #hard-words-list li {
       margin-bottom: 10px;
     }
+    .btn + .btn {
+      margin-top: 20px; /* Add margin between consecutive buttons */
+    }
   </style>
 </head>
 <body>
@@ -131,11 +134,16 @@
 
     <div class="word-section">
       <button class="btn" id="show-hard-words-btn">Show All Hard Words</button>
+      <button class="btn hidden" id="hide-hard-words-btn">Hide Hard Words</button>
+    </div>
+
+       <div class="word-section">
+      <button class="btn" id="clear-all-btn">Clear All</button>
     </div>
 
     <div class="word-section">
-      <a href="index.html" class="btn">Go Back to Main Page</a>
-    </div>
+        <a href="index.html" class="btn">Main Page</a>
+      </div>
   </div>
 
   <div class="finished-message hidden" id="finished">
@@ -168,8 +176,10 @@
     const notHardBtn = document.getElementById('not-hard-btn');
     const finishedMessage = document.getElementById('finished');
     const showHardWordsBtn = document.getElementById('show-hard-words-btn');
+    const hideHardWordsBtn = document.getElementById('hide-hard-words-btn');
     const hardWordsList = document.getElementById('hard-words-list');
     const hardWordsUl = document.getElementById('hard-words-ul');
+    const clearAllBtn = document.getElementById('clear-all-btn');
 
     // Fisher-Yates shuffle
     function shuffleWords(arr) {
@@ -255,7 +265,28 @@
         hardWordsUl.appendChild(li);
       });
       hardWordsList.classList.remove('hidden');
+      showHardWordsBtn.classList.add('hidden');
+      hideHardWordsBtn.classList.remove('hidden');
     });
+
+    // Hide all hard words
+    hideHardWordsBtn.addEventListener('click', () => {
+      hardWordsList.classList.add('hidden');
+      showHardWordsBtn.classList.remove('hidden');
+      hideHardWordsBtn.classList.add('hidden');
+    });
+
+    // Clear all tags from all words
+    function clearAllTags() {
+      words.forEach(word => {
+        delete word.tag;
+      });
+      localStorage.setItem('words', JSON.stringify(words));
+      alert('All tags have been cleared.');
+    }
+
+    // Add event listener to the "Clear All" button
+    clearAllBtn.addEventListener('click', clearAllTags);
 
     // Initialize
     loadWord(currentIndex);
