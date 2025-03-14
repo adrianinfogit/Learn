@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <!-- Viewport meta for responsiveness on mobile -->
+  <!-- 1. VIEWPORT META TAG FOR RESPONSIVENESS -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Language Test</title>
   <style>
+    /* Basic reset and box-sizing for consistent sizing */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -15,16 +16,24 @@
     body {
       font-family: Arial, sans-serif;
       background-color: #f8f8f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
+    /* 2. CONTAINER WITH FLUID WIDTH AND A MAX-WIDTH FOR LARGER DISPLAYS */
     .container {
       width: 100%;
-      max-width: 700px;
+      max-width: 700px; /* On larger screens, the container won't exceed 700px */
       margin: 40px auto;
       background: #fff;
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     h1 {
@@ -36,26 +45,11 @@
       margin-bottom: 20px;
     }
 
-    /* Container for original word and translation side by side */
-    .word-display {
-      display: flex;
-      align-items: center;
-      gap: 15px;
+    .word-section h2 {
       margin-bottom: 10px;
-    }
-
-    .word-display h2 {
-      margin: 0;
       font-size: 1.2rem;
     }
 
-    #translation {
-      display: none; /* Hidden by default */
-      font-style: italic;
-      color: #555;
-    }
-
-    /* Base styling for all buttons */
     .btn {
       padding: 10px 20px;
       margin-right: 10px;
@@ -71,24 +65,11 @@
       background-color: #0056b3;
     }
 
-    /* SPECIAL STYLING for the Randomize button */
-    /* Moved to bottom-right, made smaller, grey background */
-    #randomize-btn {
-      position: fixed;         /* Pin to the viewport */
-      bottom: 20px;           /* Distance from bottom */
-      right: 20px;            /* Distance from right */
-      background-color: #ccc; /* Grey background */
-      color: #333;            /* Darker text color */
-      font-size: 0.8rem;      /* Slightly smaller font */
-      padding: 6px 12px;      /* Smaller padding */
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-right: 0;        /* Override default .btn margin */
-    }
-
-    #randomize-btn:hover {
-      background-color: #bbb; /* Darker grey on hover */
+    #translation {
+      display: none;
+      font-style: italic;
+      margin-left: 10px;
+      color: #555;
     }
 
     #feedback {
@@ -98,9 +79,10 @@
 
     input[type="text"] {
       padding: 8px;
-      width: 60%;
+      width: 60%; /* Use a relative width so it shrinks on smaller screens */
       border: 1px solid #ccc;
       border-radius: 4px;
+      margin-bottom: 10px;
       font-size: 1rem;
     }
 
@@ -115,22 +97,33 @@
       display: none;
     }
 
+    /* 3. MEDIA QUERY FOR SMALLER DEVICES */
     @media (max-width: 600px) {
       .container {
         margin: 20px auto;
         padding: 15px;
       }
+
       h1 {
         font-size: 1.4rem;
+        margin-bottom: 15px;
       }
+
+      .word-section h2 {
+        font-size: 1.1rem;
+      }
+
       .btn {
         font-size: 0.9rem;
         padding: 8px 12px;
+        margin-bottom: 8px;
       }
+
+      /* Make the input field take full width on very small screens */
       input[type="text"] {
         width: 100%;
-        margin-bottom: 10px;
       }
+
       #feedback {
         display: block;
         margin-left: 0;
@@ -143,49 +136,192 @@
   <div class="container" id="test-container">
     <h1>Language Test</h1>
 
-    <!-- ORIGINAL WORD & TRANSLATION SIDE BY SIDE -->
     <div class="word-section">
-      <div class="word-display">
-        <h2 id="original-word"></h2>
-        <span id="translation"></span>
-      </div>
-      <!-- SHOW TRANSLATION BUTTON UNDERNEATH THE ORIGINAL WORD -->
+      <h2 id="original-word"></h2>
+      <span id="translation"></span>
       <button class="btn" id="show-translation-btn">Show Translation</button>
     </div>
 
-    <!-- USER GUESS SECTION -->
     <div class="word-section">
       <input type="text" id="user-guess" placeholder="Type your guess here..." />
       <button class="btn" id="check-answer-btn">Check Answer</button>
       <span id="feedback"></span>
     </div>
 
-    <!-- NEXT WORD BUTTON -->
     <div class="word-section">
       <button class="btn" id="next-word-btn">Next Word</button>
+      <button class="btn" id="randomize-btn" style="margin-left: 20px;">Randomize Words</button>
     </div>
   </div>
-
-  <!-- RANDOMIZE BUTTON (now pinned bottom-right) -->
-  <button class="btn" id="randomize-btn">Randomize Words</button>
 
   <div class="finished-message hidden" id="finished">
     You have completed the test!
   </div>
 
   <script>
-    // Word pairs
+    // Array of word pairs
     const words = [
       { original: "schließlich", translated: "enfin" },
       { original: "danach", translated: "ensuite" },
       { original: "weit von", translated: "loin de" },
       { original: "während", translated: "pendant" },
       { original: "plötzlich", translated: "tout à coup" },
+      { original: "sofort", translated: "tout de suite" },
+      { original: "etwas glauben", translated: "croire qc" },
+      { original: "bleiben", translated: "rester" },
+      { original: "klingeln", translated: "sonner" },
+      { original: "ein Verdacht", translated: "un soupçon" },
+      { original: "Südfrankreich", translated: "le Midi" },
+      { original: "ein Unterschied", translated: "une différence" },
+      { original: "etwas mitbringen", translated: "apporter qc" },
+      { original: "aussehen", translated: "avoir l'air" },
+      { original: "eine Unterrichtsstunde", translated: "un cours" },
+      {
+        original: "„Soupçons“ ist der Titel eines Buches von Hervé Mestron.",
+        translated: "«Soupçons» est le titre d'un livre de Herve Mestron."
+      },
+      {
+        original: "In Südfrankreich gibt es viele Touristen.",
+        translated: "Dans le Midi, il y a beaucoup de touristes."
+      },
+      {
+        original: "(einer Person/einer Sache) wegen",
+        translated: "à cause de qn/qc"
+      },
+      { original: "ein Eindruck", translated: "une impression" },
+      {
+        original: "den Eindruck haben, dass",
+        translated: "avoir l'impression que"
+      },
+      {
+        original: "etw. fühlen, spüren; etw. riechen",
+        translated: "sentir qc"
+      },
+      { original: "afrikanisch", translated: "africain/africaine" },
+      {
+        original: "die Elfenbeinküste (Staat in Westafrika)",
+        translated: "la Côte d'Ivoire"
+      },
+      { original: "etw. zeichnen", translated: "dessiner qc" },
+      { original: "jdn. ermutigen", translated: "encourager qn" },
+      { original: "das Lächeln", translated: "le sourire" },
+      { original: "hinten in, unten in", translated: "au fond de qc" },
+      { original: "eine Figur, eine Statuette", translated: "une statuette" },
+      { original: "verschwinden", translated: "disparaître" },
+      {
+        original: "jdn./etw. berühren, jdn./etw. anfassen",
+        translated: "toucher qn/qc"
+      },
+      { original: "eine Träne", translated: "une larme" },
+      { original: "etw. stehlen", translated: "voler qc" },
+      {
+        original: "ein Schulleiter/eine Schulleiterin (im „Collège“)",
+        translated: "un principal/une principale"
+      },
+      {
+        original: "draußen, im Freien; (hier) Raus mit euch!",
+        translated: "dehors"
+      },
+      { original: "eine Entdeckung", translated: "une découverte" },
+      { original: "unter", translated: "parmi" },
+      { original: "seltsam, merkwürdig", translated: "étrange/étrange" },
+      {
+        original: "das Gegenteil, das Umgekehrte",
+        translated: "l'inverse"
+      },
+      {
+        original: "gelingen, etw. zu tun",
+        translated: "arriver à faire qc"
+      },
+      { original: "Afrika", translated: "l'Afrique" },
+      { original: "eine Provinz", translated: "une province" },
+      { original: "ein Ereignis", translated: "un évènement" },
+      { original: "sich abspielen", translated: "se dérouler" },
+      { original: "umziehen", translated: "déménager" },
+      { original: "ein Gegenstand", translated: "un objet" },
+      { original: "ein Blick", translated: "un regard" },
+      {
+        original: "etw. schneiden, abschneiden",
+        translated: "couper qc"
+      },
+      {
+        original: "jdn./etw. akzeptieren, annehmen",
+        translated: "accepter qn/qc"
+      },
+      {
+        original: "eine Decke, (hier) ein Einband, Umschlag",
+        translated: "une couverture"
+      },
+      {
+        original: "ein Dieb/eine Diebin",
+        translated: "un voleur/une voleuse"
+      },
+      { original: "eine Passage", translated: "un passage" },
+      { original: "ein Roman", translated: "un roman" },
+      {
+        original: "jdm. etw. zurückgeben",
+        translated: "rendre qc à qn"
+      },
+      {
+        original: "eine Kontrolle; (hier) eine Kontrollaufgabe",
+        translated: "un contrôle"
+      },
+      {
+        original: "eine Pause (beim Sprechen) machen; innehalten",
+        translated: "marquer une pause"
+      },
+      {
+        original: "der beste/die beste/das beste",
+        translated: "le meilleur/la meilleure"
+      },
+      { original: "eine Gewohnheit", translated: "une habitude" },
+      {
+        original: "gewöhnlich, normalerweise",
+        translated: "d'habitude"
+      },
+      {
+        original: "eine (Land-)Straße",
+        translated: "une route"
+      },
+      { original: "wenn, als", translated: "lorsque" },
+      { original: "eine Schulter", translated: "une épaule" },
+      {
+        original: "Zuerst haben sie in Paris gewohnt, jetzt wohnen sie in der Provinz.",
+        translated: "D'abord, ils ont habité à Paris, maintenant ils habitent en province."
+      },
+      {
+        original: "Viele wichtige Ereignisse spielen sich in Paris ab.",
+        translated: "Beaucoup d'évènements importants se déroulent à Paris."
+      },
+      {
+        original: "Sie sind von Paris nach Valence umgezogen.",
+        translated: "Ils ont déménagé de Paris à Valence."
+      },
+      {
+        original: "Ich brauche ein Messer, um das Brot zu schneiden.",
+        translated: "Il me faut un couteau pour couper le pain."
+      },
+      {
+        original: "Auf dem Umschlag ist das Foto eines Jungen.",
+        translated: "Sur la couverture, il y a la photo d'un garçon."
+      },
+      {
+        original: "Die Lehrerin gibt die Arbeiten zurück.",
+        translated: "La professeure rend les copies."
+      },
+      {
+        original: "Wer hat die beste Note?",
+        translated: "Qui a la meilleure note?"
+      },
+      {
+        original: "Gelatos hat eine gute Note, wie gewöhnlich.",
+        translated: "Gelatos a une bonne note, comme d'habitude."
+      }
     ];
 
     let currentIndex = 0;
 
-    // Get references
+    // HTML element references
     const testContainer = document.getElementById('test-container');
     const randomizeBtn = document.getElementById('randomize-btn');
     const originalWord = document.getElementById('original-word');
@@ -210,38 +346,8 @@
       shuffleWords(words);
       currentIndex = 0;
       loadWord(currentIndex);
-      // Reset if user had completed the test
       testContainer.classList.remove('hidden');
       finishedMessage.classList.add('hidden');
-    });
-
-    // Show translation
-    showTranslationBtn.addEventListener('click', () => {
-      translation.style.display = 'inline';
-    });
-
-    // Check answer logic in a reusable function
-    function checkAnswer() {
-      const guess = userGuess.value.trim();
-      const correctAnswer = words[currentIndex].translated.trim();
-
-      if (guess.toLowerCase() === correctAnswer.toLowerCase()) {
-        feedback.textContent = 'Correct!';
-        feedback.style.color = 'green';
-      } else {
-        feedback.textContent = 'Wrong!';
-        feedback.style.color = 'red';
-      }
-    }
-
-    // Check answer on button click
-    checkAnswerBtn.addEventListener('click', checkAnswer);
-
-    // Pressing Enter in the input also checks the answer automatically
-    userGuess.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
-        checkAnswer();
-      }
     });
 
     // Load a word by index
@@ -254,19 +360,37 @@
       feedback.style.color = 'black';
     }
 
+    // Show translation
+    showTranslationBtn.addEventListener('click', () => {
+      translation.style.display = 'inline';
+    });
+
+    // Check user's answer
+    checkAnswerBtn.addEventListener('click', () => {
+      const guess = userGuess.value.trim();
+      const correctAnswer = words[currentIndex].translated.trim();
+
+      if (guess.toLowerCase() === correctAnswer.toLowerCase()) {
+        feedback.textContent = 'Correct!';
+        feedback.style.color = 'green';
+      } else {
+        feedback.textContent = 'Wrong!';
+        feedback.style.color = 'red';
+      }
+    });
+
     // Go to next word
     nextWordBtn.addEventListener('click', () => {
       currentIndex++;
       if (currentIndex < words.length) {
         loadWord(currentIndex);
       } else {
-        // All words shown
         testContainer.classList.add('hidden');
         finishedMessage.classList.remove('hidden');
       }
     });
 
-    // Initialize with the first word
+    // Initialize
     loadWord(currentIndex);
   </script>
 </body>
