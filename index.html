@@ -37,7 +37,7 @@
 
     /* Make the current word a bit larger than normal text. */
     #original-word {
-      font-size: 1.5rem;
+      font-size: 6rem; /* Increased to twice its size */
       margin-bottom: 10px;
     }
 
@@ -140,6 +140,11 @@
       height: 70px; /* Increased from 40px */
       cursor: pointer;
     }
+    .not-hard-logo {
+      width: 60px;
+      height: 70px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -166,6 +171,7 @@
 
     <div class="word-section">
       <img src="hard-logo.png" alt="Hard" class="hard-logo" id="hard-logo">
+      <img src="not-hard-logo.png" alt="Not Hard" class="not-hard-logo" id="not-hard-logo">
     </div>
 
     <div class="word-section">
@@ -331,6 +337,7 @@
     const nextWordBtn = document.getElementById('next-word-btn');
     const finishedMessage = document.getElementById('finished');
     const hardLogo = document.getElementById('hard-logo');
+    const notHardLogo = document.getElementById('not-hard-logo');
 
     // Fisher-Yates shuffle
     function shuffleWords(arr) {
@@ -470,6 +477,19 @@
     }
 
     hardLogo.addEventListener('click', () => tagWord('Hard'));
+
+    // Remove "Hard" tag and go to next word
+    notHardLogo.addEventListener('click', () => {
+      if (currentIndex < currentTestWords.length) {
+        currentTestWords[currentIndex].tag = '';
+        const wordIndex = words.findIndex(word => word.original === currentTestWords[currentIndex].original);
+        if (wordIndex !== -1) {
+          words[wordIndex].tag = '';
+          localStorage.setItem('words', JSON.stringify(words));
+        }
+      }
+      nextWordBtn.click();
+    });
 
     // Randomize words based on current mode
     randomizeBtn.addEventListener('click', () => {
