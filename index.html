@@ -6,53 +6,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Language Test</title>
   <style>
-    /* Basic reset and box-sizing for consistent sizing */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    /* Make the page background white and center all text. */
     body {
       font-family: Arial, sans-serif;
-      background-color: #f8f8f8;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
     }
 
-    /* 2. CONTAINER WITH FLUID WIDTH AND A MAX-WIDTH FOR LARGER DISPLAYS */
+    /* Remove the container "box" styling, just use it as a simple wrapper. */
     .container {
-      width: 100%;
-      max-width: 700px; /* On larger screens, the container won't exceed 700px */
-      margin: 40px auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      max-width: 700px; 
+      margin: 0 auto; /* Center the container horizontally */
     }
 
     h1 {
-      text-align: center;
       margin-bottom: 20px;
+      font-size: 2rem;
     }
 
+    /* Slight spacing between each section. */
     .word-section {
       margin-bottom: 20px;
     }
 
-    .word-section h2 {
+    /* Make the current word a bit larger than normal text. */
+    #original-word {
+      font-size: 1.5rem;
       margin-bottom: 10px;
-      font-size: 1.2rem;
     }
 
+    /* Basic button styling with bright blue color. */
     .btn {
       padding: 10px 20px;
-      margin-right: 10px;
+      margin: 5px; /* Use a small margin so buttons don’t stick together */
       border: none;
       background-color: #007BFF;
       color: #fff;
@@ -65,6 +53,7 @@
       background-color: #0056b3;
     }
 
+    /* Hide translation by default, show it inline when toggled. */
     #translation {
       display: none;
       font-style: italic;
@@ -79,11 +68,13 @@
 
     input[type="text"] {
       padding: 8px;
-      width: 60%; /* Use a relative width so it shrinks on smaller screens */
+      width: 60%;
+      max-width: 300px;
       border: 1px solid #ccc;
       border-radius: 4px;
       margin-bottom: 10px;
       font-size: 1rem;
+      text-align: center;
     }
 
     .finished-message {
@@ -99,9 +90,8 @@
 
     /* 3. MEDIA QUERY FOR SMALLER DEVICES */
     @media (max-width: 600px) {
-      .container {
-        margin: 20px auto;
-        padding: 15px;
+      body {
+        padding: 10px;
       }
 
       h1 {
@@ -109,19 +99,19 @@
         margin-bottom: 15px;
       }
 
-      .word-section h2 {
-        font-size: 1.1rem;
+      #original-word {
+        font-size: 1.2rem;
       }
 
       .btn {
         font-size: 0.9rem;
         padding: 8px 12px;
-        margin-bottom: 8px;
+        margin: 5px auto;
       }
 
-      /* Make the input field take full width on very small screens */
       input[type="text"] {
-        width: 100%;
+        width: 80%;
+        max-width: 100%;
       }
 
       #feedback {
@@ -137,23 +127,32 @@
     <h1>Language Test</h1>
 
     <div class="word-section">
-      <h2 id="original-word"></h2>
-      <span id="translation"></span>
+      <div id="original-word"></div>
       <button class="btn" id="show-translation-btn">Show Translation</button>
+      <span id="translation"></span>
     </div>
 
     <div class="word-section">
       <input type="text" id="user-guess" placeholder="Type your guess here..." />
+      <br />
       <button class="btn" id="check-answer-btn">Check Answer</button>
       <span id="feedback"></span>
     </div>
 
     <div class="word-section">
       <button class="btn" id="next-word-btn">Next Word</button>
-      <button class="btn" id="randomize-btn" style="margin-left: 20px;">Randomize Words</button>
+      <button class="btn" id="randomize-btn">Randomize Words</button>
     </div>
+
     <div class="word-section">
-      <button class="btn" id="remind-me-btn">Remind Me in 3 Mins</button>
+      <button class="btn" id="easy-btn">Easy</button>
+      <button class="btn" id="med-btn">Med</button>
+      <button class="btn" id="hard-btn">Hard</button>
+    </div>
+
+    <div class="word-section">
+      <button class="btn" id="show-hard-btn">Show Hard Only</button>
+      <button class="btn" id="export-btn">Export Data</button>
     </div>
   </div>
 
@@ -169,160 +168,14 @@
       { original: "weit von", translated: "loin de" },
       { original: "während", translated: "pendant" },
       { original: "plötzlich", translated: "tout à coup" },
-      { original: "sofort", translated: "tout de suite" },
-      { original: "etwas glauben", translated: "croire qc" },
-      { original: "bleiben", translated: "rester" },
-      { original: "klingeln", translated: "sonner" },
-      { original: "ein Verdacht", translated: "un soupçon" },
-      { original: "Südfrankreich", translated: "le Midi" },
-      { original: "ein Unterschied", translated: "une différence" },
-      { original: "etwas mitbringen", translated: "apporter qc" },
-      { original: "aussehen", translated: "avoir l'air" },
-      { original: "eine Unterrichtsstunde", translated: "un cours" },
-      {
-        original: "„Soupçons“ ist der Titel eines Buches von Hervé Mestron.",
-        translated: "«Soupçons» est le titre d'un livre de Herve Mestron."
-      },
-      {
-        original: "In Südfrankreich gibt es viele Touristen.",
-        translated: "Dans le Midi, il y a beaucoup de touristes."
-      },
-      {
-        original: "(einer Person/einer Sache) wegen",
-        translated: "à cause de qn/qc"
-      },
-      { original: "ein Eindruck", translated: "une impression" },
-      {
-        original: "den Eindruck haben, dass",
-        translated: "avoir l'impression que"
-      },
-      {
-        original: "etw. fühlen, spüren; etw. riechen",
-        translated: "sentir qc"
-      },
-      { original: "afrikanisch", translated: "africain/africaine" },
-      {
-        original: "die Elfenbeinküste (Staat in Westafrika)",
-        translated: "la Côte d'Ivoire"
-      },
-      { original: "etw. zeichnen", translated: "dessiner qc" },
-      { original: "jdn. ermutigen", translated: "encourager qn" },
-      { original: "das Lächeln", translated: "le sourire" },
-      { original: "hinten in, unten in", translated: "au fond de qc" },
-      { original: "eine Figur, eine Statuette", translated: "une statuette" },
-      { original: "verschwinden", translated: "disparaître" },
-      {
-        original: "jdn./etw. berühren, jdn./etw. anfassen",
-        translated: "toucher qn/qc"
-      },
-      { original: "eine Träne", translated: "une larme" },
-      { original: "etw. stehlen", translated: "voler qc" },
-      {
-        original: "ein Schulleiter/eine Schulleiterin (im „Collège“)",
-        translated: "un principal/une principale"
-      },
-      {
-        original: "draußen, im Freien; (hier) Raus mit euch!",
-        translated: "dehors"
-      },
-      { original: "eine Entdeckung", translated: "une découverte" },
-      { original: "unter", translated: "parmi" },
-      { original: "seltsam, merkwürdig", translated: "étrange/étrange" },
-      {
-        original: "das Gegenteil, das Umgekehrte",
-        translated: "l'inverse"
-      },
-      {
-        original: "gelingen, etw. zu tun",
-        translated: "arriver à faire qc"
-      },
-      { original: "Afrika", translated: "l'Afrique" },
-      { original: "eine Provinz", translated: "une province" },
-      { original: "ein Ereignis", translated: "un évènement" },
-      { original: "sich abspielen", translated: "se dérouler" },
-      { original: "umziehen", translated: "déménager" },
-      { original: "ein Gegenstand", translated: "un objet" },
-      { original: "ein Blick", translated: "un regard" },
-      {
-        original: "etw. schneiden, abschneiden",
-        translated: "couper qc"
-      },
-      {
-        original: "jdn./etw. akzeptieren, annehmen",
-        translated: "accepter qn/qc"
-      },
-      {
-        original: "eine Decke, (hier) ein Einband, Umschlag",
-        translated: "une couverture"
-      },
-      {
-        original: "ein Dieb/eine Diebin",
-        translated: "un voleur/une voleuse"
-      },
-      { original: "eine Passage", translated: "un passage" },
-      { original: "ein Roman", translated: "un roman" },
-      {
-        original: "jdm. etw. zurückgeben",
-        translated: "rendre qc à qn"
-      },
-      {
-        original: "eine Kontrolle; (hier) eine Kontrollaufgabe",
-        translated: "un contrôle"
-      },
-      {
-        original: "eine Pause (beim Sprechen) machen; innehalten",
-        translated: "marquer une pause"
-      },
-      {
-        original: "der beste/die beste/das beste",
-        translated: "le meilleur/la meilleure"
-      },
-      { original: "eine Gewohnheit", translated: "une habitude" },
-      {
-        original: "gewöhnlich, normalerweise",
-        translated: "d'habitude"
-      },
-      {
-        original: "eine (Land-)Straße",
-        translated: "une route"
-      },
-      { original: "wenn, als", translated: "lorsque" },
-      { original: "eine Schulter", translated: "une épaule" },
-      {
-        original: "Zuerst haben sie in Paris gewohnt, jetzt wohnen sie in der Provinz.",
-        translated: "D'abord, ils ont habité à Paris, maintenant ils habitent en province."
-      },
-      {
-        original: "Viele wichtige Ereignisse spielen sich in Paris ab.",
-        translated: "Beaucoup d'évènements importants se déroulent à Paris."
-      },
-      {
-        original: "Sie sind von Paris nach Valence umgezogen.",
-        translated: "Ils ont déménagé de Paris à Valence."
-      },
-      {
-        original: "Ich brauche ein Messer, um das Brot zu schneiden.",
-        translated: "Il me faut un couteau pour couper le pain."
-      },
-      {
-        original: "Auf dem Umschlag ist das Foto eines Jungen.",
-        translated: "Sur la couverture, il y a la photo d'un garçon."
-      },
-      {
-        original: "Die Lehrerin gibt die Arbeiten zurück.",
-        translated: "La professeure rend les copies."
-      },
-      {
-        original: "Wer hat die beste Note?",
-        translated: "Qui a la meilleure note?"
-      },
-      {
-        original: "Gelatos hat eine gute Note, wie gewöhnlich.",
-        translated: "Gelatos a une bonne note, comme d'habitude."
-      }
     ];
 
     let currentIndex = 0;
+    const wordQueue = [];
+    
+    // Variables for testing mode
+    let currentTestWords = words; // initially, use the full list
+    let isHardMode = false;
 
     // HTML element references
     const testContainer = document.getElementById('test-container');
@@ -335,7 +188,11 @@
     const feedback = document.getElementById('feedback');
     const nextWordBtn = document.getElementById('next-word-btn');
     const finishedMessage = document.getElementById('finished');
-    const remindMeBtn = document.getElementById('remind-me-btn');
+    const easyBtn = document.getElementById('easy-btn');
+    const medBtn = document.getElementById('med-btn');
+    const hardBtn = document.getElementById('hard-btn');
+    const showHardBtn = document.getElementById('show-hard-btn');
+    const exportBtn = document.getElementById('export-btn');
 
     // Fisher-Yates shuffle
     function shuffleWords(arr) {
@@ -345,23 +202,46 @@
       }
     }
 
-    // Shuffle words on button click
-    randomizeBtn.addEventListener('click', () => {
-      shuffleWords(words);
-      currentIndex = 0;
-      loadWord(currentIndex);
-      testContainer.classList.remove('hidden');
-      finishedMessage.classList.add('hidden');
-    });
+    // Save state to local storage
+    function saveState() {
+      localStorage.setItem('currentIndex', currentIndex);
+      localStorage.setItem('wordQueue', JSON.stringify(wordQueue));
+      localStorage.setItem('words', JSON.stringify(words));
+    }
 
-    // Load a word by index
+    // Load state from local storage
+    function loadState() {
+      const savedIndex = localStorage.getItem('currentIndex');
+      const savedQueue = localStorage.getItem('wordQueue');
+      const savedWords = localStorage.getItem('words');
+
+      if (savedIndex !== null) {
+        currentIndex = parseInt(savedIndex, 10);
+      }
+      if (savedQueue !== null) {
+        wordQueue.push(...JSON.parse(savedQueue));
+      }
+      if (savedWords !== null) {
+        const savedWordsArray = JSON.parse(savedWords);
+        for (let i = 0; i < words.length; i++) {
+          if (savedWordsArray[i]) {
+            words[i].tag = savedWordsArray[i].tag;
+          }
+        }
+      }
+    }
+
+    // Load a word by index from currentTestWords
     function loadWord(index) {
-      originalWord.textContent = words[index].original;
-      translation.textContent = words[index].translated;
-      translation.style.display = 'none';
-      userGuess.value = '';
-      feedback.textContent = '';
-      feedback.style.color = 'black';
+      if (index < currentTestWords.length) {
+        originalWord.textContent = currentTestWords[index].original;
+        translation.textContent = currentTestWords[index].translated;
+        translation.style.display = 'none';
+        userGuess.value = '';
+        feedback.textContent = '';
+        feedback.style.color = 'black';
+        saveState();
+      }
     }
 
     // Show translation
@@ -369,11 +249,10 @@
       translation.style.display = 'inline';
     });
 
-    // Check user's answer
+    // Check user's answer using currentTestWords
     checkAnswerBtn.addEventListener('click', () => {
       const guess = userGuess.value.trim();
-      const correctAnswer = words[currentIndex].translated.trim();
-
+      const correctAnswer = currentTestWords[currentIndex].translated.trim();
       if (guess.toLowerCase() === correctAnswer.toLowerCase()) {
         feedback.textContent = 'Correct!';
         feedback.style.color = 'green';
@@ -383,35 +262,111 @@
       }
     });
 
-    // Go to next word
+    // Go to next word from currentTestWords
     nextWordBtn.addEventListener('click', () => {
-      currentIndex++;
-      if (currentIndex < words.length) {
+      if (wordQueue.length > 0) {
+        currentIndex = wordQueue.shift();
+      } else {
+        currentIndex++;
+      }
+      if (currentIndex < currentTestWords.length) {
         loadWord(currentIndex);
       } else {
         testContainer.classList.add('hidden');
         finishedMessage.classList.remove('hidden');
       }
+      saveState();
     });
 
-    // Remind me in 3 minutes
-    remindMeBtn.addEventListener('click', () => {
-      const currentWord = words[currentIndex];
-      setTimeout(() => {
-        alert(`Reminder: The word is "${currentWord.original}" which translates to "${currentWord.translated}".`);
-      }, 12000); // 3 minutes in milliseconds
-
-      // Move to the next word
+    // Tag word as Easy, Med, or Hard and queue for later review if needed
+    function tagWord(tag) {
+      const taggedIndex = currentIndex;
+      // Update the tag on the current word
+      currentTestWords[currentIndex].tag = tag;
+      
+      // Move to the next word in the main list
       currentIndex++;
-      if (currentIndex < words.length) {
+      
+      // For "Med" and "Hard", add the current word index to the queue for later review
+      if (tag === 'Hard') {
+        wordQueue.push(taggedIndex);
+        wordQueue.push(taggedIndex);
+      } else if (tag === 'Med') {
+        wordQueue.push(taggedIndex);
+      }
+      
+      // Load the next word: if there are words left in the main list, use them first
+      if (currentIndex < currentTestWords.length) {
+        loadWord(currentIndex);
+      } else if (wordQueue.length > 0) {
+        currentIndex = wordQueue.shift();
         loadWord(currentIndex);
       } else {
         testContainer.classList.add('hidden');
         finishedMessage.classList.remove('hidden');
       }
+      saveState();
+    }
+
+    easyBtn.addEventListener('click', () => tagWord('Easy'));
+    medBtn.addEventListener('click', () => tagWord('Med'));
+    hardBtn.addEventListener('click', () => tagWord('Hard'));
+
+    // Randomize words based on current mode
+    randomizeBtn.addEventListener('click', () => {
+      if (isHardMode) {
+        shuffleWords(currentTestWords);
+      } else {
+        shuffleWords(words);
+        currentTestWords = words; // reset to full list if not in hard mode
+      }
+      currentIndex = 0;
+      wordQueue.length = 0; // Clear the queue
+      loadWord(currentIndex);
+      testContainer.classList.remove('hidden');
+      finishedMessage.classList.add('hidden');
+      saveState();
     });
 
-    // Initialize
+    // "Show Hard Only" mode: filter words with tag "Hard"
+    showHardBtn.addEventListener('click', () => {
+      const hardWords = words.filter(word => word.tag === 'Hard');
+      if (hardWords.length === 0) {
+        alert('There are no hard words to display.');
+        return;
+      }
+      isHardMode = true;
+      currentTestWords = hardWords;
+      currentIndex = 0;
+      wordQueue.length = 0;
+      loadWord(currentIndex);
+    });
+
+    // Export function to download words and their tags as a JSON file
+    exportBtn.addEventListener('click', exportWords);
+    function exportWords() {
+      // Create an array with the word details you want to export
+      const exportData = words.map(word => ({
+        original: word.original,
+        translated: word.translated,
+        tag: word.tag || 'Not tagged'
+      }));
+      // Convert the array to a JSON string
+      const jsonString = JSON.stringify(exportData, null, 2);
+      // Create a Blob from the JSON string
+      const blob = new Blob([jsonString], { type: "application/json" });
+      // Generate a download link and trigger it
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "wordData.json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // Initialize state
+    loadState();
     loadWord(currentIndex);
   </script>
 </body>
